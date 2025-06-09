@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Blog</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive E-Commerce Page</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header class="header">
-        <h1>My Professional Blog</h1>
-        <nav>
-            <ul class="nav-bar">
-                <li><a href="#" data-section="home" class="nav-link active">Home</a></li>
-                <li><a href="#" data-section="posts" class="nav-link">Posts</a></li>
-                <li><a href="#" data-section="contact" class="nav-link">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1>🛍️ Explore Our Products</h1>
+    <div class="controls">
+      <select id="filterCategory">
+        <option value="all">All Categories</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+      </select>
 
-    <main id="main-content">
-        <!-- Sections dynamically loaded here -->
-    </main>
+      <select id="sortPrice">
+        <option value="default">Sort by Price</option>
+        <option value="low">Low to High</option>
+        <option value="high">High to Low</option>
+      </select>
+    </div>
+  </header>
 
-    <footer class="footer">
-        <p>© 2025 My Professional Blog. All rights reserved.</p>
-    </footer>
+  <main id="product-list">
+    <!-- Product cards will be inserted here -->
+  </main>
 
-    <script src="script.js"></script>
+  <footer>
+    <p>Crafted with ❤️ by ApexPlanet Intern</p>
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <img id="modal-img" />
+      <h2 id="modal-title"></h2>
+      <p id="modal-category"></p>
+      <p id="modal-price"></p>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
