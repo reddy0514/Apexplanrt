@@ -1,103 +1,111 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const mainContent = document.getElementById("main-content");
-    const navLinks = document.querySelectorAll(".nav-link");
+const products = [
+  {
+    name: "Smartphone",
+    category: "electronics",
+    price: 699,
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=2118&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    name: "Jeans",
+    category: "clothing",
+    price: 49,
+    image: "https://st.depositphotos.com/1021124/1759/i/450/depositphotos_17597535-stock-photo-jeans.jpg"
+  },
+  {
+    name: "Headphones",
+    category: "electronics",
+    price: 199,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTp99HdLuyoa0PNpvc5bYccVnrRM-Rn1DjRw&s"
+  },
+  {
+    name: "T-Shirt",
+    category: "clothing",
+    price: 25,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaD3yJMoLi5jiqPG3gn8r7spsswix9b6g6bg&s"
+  }
+];
 
-    // Sections content
-    const sections = {
-        home: `
-            <section class="hero">
-                <h2>Welcome to My Blog</h2>
-                <p>Explore exciting articles about technology, design, and everyday life. Dive into stories crafted to inspire and inform.</p>
-            </section>
-        `,
-        posts: `
-            <section id="posts" class="posts">
-                <h2>Recent Posts</h2>
-                <div class="post" data-id="1">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5KXDNeCwRNx1V55Bc9OJ6Tndh2r509wCpaQ&s" alt="Tech Trends" style="width: 200px; height: 200px;">
+const productList = document.getElementById("product-list");
+const filterCategory = document.getElementById("filterCategory");
+const sortPrice = document.getElementById("sortPrice");
 
-                    <h3>Top 5 Tech Trends in 2025</h3>
-                    <p>Discover the future of technology and innovation...</p>
-                    <button class="read-more" data-id="1">Read More</button>
-                </div>
-                <div class="post" data-id="2">
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTJRBr2SXGF2D_nnmb7pD8Q1iA_8Ql9cX1zg&s" alt="Tech Trends" style="width: 200px; height: 200px;">
+// Modal Elements
+const modal = document.getElementById("modal");
+const modalImg = document.getElementById("modal-img");
+const modalTitle = document.getElementById("modal-title");
+const modalCategory = document.getElementById("modal-category");
+const modalPrice = document.getElementById("modal-price");
+const closeBtn = document.querySelector(".close-btn");
 
-                    <h3>How Design Shapes Our World</h3>
-                    <p>A dive into the importance of design in everyday life...</p>
-                    <button class="read-more" data-id="2">Read More</button>
-                </div>
-            </section>
-        `,
-        contact: `
-            <section id="contact" class="contact">
-                <h2>Contact</h2>
-                <form id="contact-form">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                    
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                    
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                    
-                    <button type="submit">Send</button>
-                </form>
-            </section>
-        `,
-    };
+function displayProducts(filteredProducts) {
+  productList.innerHTML = "";
+  filteredProducts.forEach((product, index) => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+    div.innerHTML = `
+      <i class="fas fa-heart favorite" data-index="${index}"></i>
+      <img src="${product.image}" alt="${product.name}" loading="lazy"/>
+      <div class="product-info">
+        <h3>${product.name}</h3>
+        <p>${product.category}</p>
+        <p><strong>$${product.price}</strong></p>
+      </div>
+    `;
 
-    // Initial load: Home section
-    mainContent.innerHTML = sections.home;
-
-    // Navigation click event
-    navLinks.forEach(link => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const section = link.getAttribute("data-section");
-
-            // Highlight active link
-            navLinks.forEach(link => link.classList.remove("active"));
-            link.classList.add("active");
-
-            // Load section content
-            mainContent.innerHTML = sections[section];
-
-            // Attach "Read More" functionality if in Posts section
-            if (section === "posts") {
-                attachReadMoreEvents();
-            }
-        });
+    div.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("favorite")) {
+        openModal(product);
+      }
     });
 
-    // Function to attach "Read More" events
-    function attachReadMoreEvents() {
-        document.querySelectorAll(".read-more").forEach(button => {
-            button.addEventListener("click", (e) => {
-                e.preventDefault();
-                const postId = button.getAttribute("data-id");
-                const postContent = postId === "1"
-                    ? `
-                        <h2>Top 5 Tech Trends in 2025</h2>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5KXDNeCwRNx1V55Bc9OJ6Tndh2r509wCpaQ&s" alt="Tech Trends">
-                        <p>Technology is reshaping the world in 2025. Here are the top 5 trends:</p>
-                        <p>1. Artificial Intelligence: AI continues to revolutionize industries...</p>
-                        <p>2. Quantum Computing: The next big leap in computing power...</p>
-                        <p>3. Blockchain: Beyond cryptocurrencies, it's transforming finance...</p>
-                        <p>4. Internet of Things: Smart devices connecting everything...</p>
-                        <p>5. Space Exploration: Companies like SpaceX are taking humanity to the stars.</p>
-                    `
-                    : `
-                        <h2>How Design Shapes Our World</h2>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTJRBr2SXGF2D_nnmb7pD8Q1iA_8Ql9cX1zg&s" alt="Design">
-                        <p>Design is all around us. From the devices we use to the clothes we wear...</p>
-                        <p>Good design improves functionality, aesthetics, and user experience...</p>
-                        <p>Learn how design thinking transforms businesses, products, and lives.</p>
-                    `;
+    div.querySelector(".favorite").addEventListener("click", function (e) {
+      e.stopPropagation();
+      this.classList.toggle("active");
+    });
 
-                mainContent.innerHTML = `<section>${postContent}<button onclick="location.reload()">Back to Posts</button></section>`;
-            });
-        });
-    }
+    productList.appendChild(div);
+  });
+}
+
+function openModal(product) {
+  modalImg.src = product.image;
+  modalTitle.textContent = product.name;
+  modalCategory.textContent = `Category: ${product.category}`;
+  modalPrice.textContent = `Price: $${product.price}`;
+  modal.classList.remove("hidden");
+}
+
+closeBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
+
+window.addEventListener("click", e => {
+  if (e.target === modal) {
+    modal.classList.add("hidden");
+  }
+});
+
+function filterAndSort() {
+  let filtered = [...products];
+
+  const category = filterCategory.value;
+  if (category !== "all") {
+    filtered = filtered.filter(p => p.category === category);
+  }
+
+  const sort = sortPrice.value;
+  if (sort === "low") {
+    filtered.sort((a, b) => a.price - b.price);
+  } else if (sort === "high") {
+    filtered.sort((a, b) => b.price - a.price);
+  }
+
+  displayProducts(filtered);
+}
+
+filterCategory.addEventListener("change", filterAndSort);
+sortPrice.addEventListener("change", filterAndSort);
+
+window.addEventListener("DOMContentLoaded", () => {
+  displayProducts(products);
 });
